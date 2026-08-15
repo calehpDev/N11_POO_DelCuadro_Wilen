@@ -1,25 +1,25 @@
 package vallegrande.edu.pe.view;
 
-import javax.management.PersistentMBean;
-
 public class BibliotecaView {
 
-    public void mostrarTitulo(){
+    public void mostrarTitulo() {
         System.out.println("=====================");
-        System.out.println("ISTEMA DE BIBLIOTECA VG");
+        System.out.println("SISTEMA DE BIBLIOTECA VG");
         System.out.println("=====================");
     }
 
-    //MENU
-    public void mostrarMenu(){
-        System.out.println("1. Resgistar Libro");
-        System.out.println("2. Listas Libro");
-        System.out.println("3. Buscar Libro");
-        System.out.println("4. Salir");
-        System.out.println("Selecione una Opcion:");
+    public void mostrarMenu() {
+        System.out.println("\n===== BIBLIOTECA =====");
+        System.out.println("1. Registrar libro");
+        System.out.println("2. Listar libros");
+        System.out.println("3. Buscar libro");
+        System.out.println("4. Registrar autor [Nuevo]");
+        System.out.println("5. Listar autores [Nuevo]");
+        System.out.println("6. Salir");
+        System.out.print("Seleccione una opción: ");
     }
-    //MENSAJE
-    public void mostrarMensaje( String mensaje){
+
+    public void mostrarMensaje(String mensaje) {
         System.out.println(mensaje);
     }
 }

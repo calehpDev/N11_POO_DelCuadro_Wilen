@@ -1,0 +1,29 @@
+package vallegrande.edu.pe.controller;
+
+import vallegrande.edu.pe.model.Autor;
+import java.util.ArrayList;
+
+public class AutorController {
+
+    private ArrayList<Autor> autores;
+
+    public AutorController() {
+        this.autores = new ArrayList<>();
+    }
+
+    public void agregarAutor(Autor autor) {
+        autores.add(autor);
+        System.out.println("Autor registrado correctamente.");
+    }
+
+    public void listarAutores() {
+        if (autores.isEmpty()) {
+            System.out.println("No hay autores registrados.");
+            return;
+        }
+        System.out.println("--- LISTA DE AUTORES ---");
+        for (Autor autor : autores) {
+            autor.mostrarAutor();
+        }
+    }
+}
