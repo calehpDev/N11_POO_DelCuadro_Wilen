@@ -3,8 +3,10 @@ package vallegrande.edu.pe.miperfil.view;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class PerfilView {
@@ -12,71 +14,64 @@ public class PerfilView {
     private Label titulo;
     private TextField txtNombre;
     private TextField txtCarrera;
-    private TextField txtSemestre;
-    private TextField txtHobby; // Dato adicional
+    private ComboBox<String> cboSemestre;
+    private ComboBox<String> cboHobby;
     private Button btnMostrar;
+    private Button btnLimpiar;
     private Label lblResultado;
 
-    public PerfilView(){
-        titulo = new Label("MI PERFIL");
-        titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
+    public PerfilView() {
+        titulo = new Label("REGISTRO DE PERFIL");
+        titulo.getStyleClass().add("titulo");
 
         txtNombre = new TextField();
         txtNombre.setPromptText("Ingrese su nombre");
-        txtNombre.setStyle("-fx-padding: 8; -fx-background-radius: 5;");
 
         txtCarrera = new TextField();
         txtCarrera.setPromptText("Ingrese su carrera");
-        txtCarrera.setStyle("-fx-padding: 8; -fx-background-radius: 5;");
 
-        txtSemestre = new TextField();
-        txtSemestre.setPromptText("Ingrese su semestre");
-        txtSemestre.setStyle("-fx-padding: 8; -fx-background-radius: 5;");
+        cboSemestre = new ComboBox<>();
+        cboSemestre.getItems().addAll("1° Semestre", "2° Semestre", "3° Semestre", "4° Semestre", "5° Semestre", "6° Semestre");
+        cboSemestre.setPromptText("Seleccione semestre");
+        cboSemestre.setMaxWidth(Double.MAX_VALUE);
 
-        txtHobby = new TextField();
-        txtHobby.setPromptText("Ingrese su hobby o pasatiempo");
-        txtHobby.setStyle("-fx-padding: 8; -fx-background-radius: 5;");
+        cboHobby = new ComboBox<>();
+        cboHobby.getItems().addAll("Videojuegos", "Deportes", "Música", "Lectura", "Fotografía", "Programación");
+        cboHobby.setPromptText("Seleccione hobby o pasatiempo");
+        cboHobby.setMaxWidth(Double.MAX_VALUE);
 
-        btnMostrar = new Button("Confirmar y Mostrar Perfil");
-        btnMostrar.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 5;");
+        btnMostrar = new Button("Mostrar Perfil");
+        btnMostrar.getStyleClass().add("button-primary");
+
+        btnLimpiar = new Button("Limpiar");
+        btnLimpiar.getStyleClass().add("button-secondary");
+
+        HBox contenedorBotones = new HBox(10, btnMostrar, btnLimpiar);
+        contenedorBotones.setAlignment(Pos.CENTER);
 
         lblResultado = new Label();
-        lblResultado.setStyle("-fx-font-size: 13px; -fx-text-fill: #0f172a;");
+        lblResultado.getStyleClass().add("label-resultado");
 
         contenedor = new VBox(12);
         contenedor.setPadding(new Insets(20));
         contenedor.setAlignment(Pos.CENTER);
-        contenedor.setStyle("-fx-background-color: #f1f5f9;");
-
         contenedor.getChildren().addAll(
                 titulo,
                 txtNombre,
                 txtCarrera,
-                txtSemestre,
-                txtHobby,
-                btnMostrar,
+                cboSemestre,
+                cboHobby,
+                contenedorBotones,
                 lblResultado
         );
     }
-    public VBox getContenedor(){
-        return contenedor;
-    }
-    public TextField getTxtNombre(){
-        return txtNombre;
-    }
-    public TextField getTxtCarrera(){
-        return txtCarrera;
-    }
-    public TextField getTxtSemestre(){
-        return txtSemestre;
-    }
-    public TextField getTxtHobby(){
-        return txtHobby;
-    }
-    public Button getBtnMostrar(){
-        return btnMostrar;
-    }
-    public Label getLblResultado(){
-        return lblResultado;
-    }
+
+    public VBox getContenedor() { return contenedor; }
+    public TextField getTxtNombre() { return txtNombre; }
+    public TextField getTxtCarrera() { return txtCarrera; }
+    public ComboBox<String> getCboSemestre() { return cboSemestre; }
+    public ComboBox<String> getCboHobby() { return cboHobby; }
+    public Button getBtnMostrar() { return btnMostrar; }
+    public Button getBtnLimpiar() { return btnLimpiar; }
+    public Label getLblResultado() { return lblResultado; }
 }

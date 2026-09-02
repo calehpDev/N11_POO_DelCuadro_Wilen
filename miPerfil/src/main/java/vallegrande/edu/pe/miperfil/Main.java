@@ -8,19 +8,24 @@ import vallegrande.edu.pe.miperfil.view.PerfilView;
 
 public class Main extends Application {
     @Override
-    public void start(Stage stage){
+    public void start(Stage stage) {
         PerfilView view = new PerfilView();
         new PerfilController(view);
-        Scene scene = new Scene(
-                view.getContenedor(),
-                400,
-                450
-        );
-        stage.setTitle("Mi perfil");
+
+        Scene scene = new Scene(view.getContenedor(), 400, 500);
+
+        try {
+            scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        } catch (Exception e) {
+            System.out.println("Archivo CSS no encontrado, usando estilos por defecto.");
+        }
+
+        stage.setTitle("Mi Perfil");
         stage.setScene(scene);
         stage.show();
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         launch(args);
     }
 }
