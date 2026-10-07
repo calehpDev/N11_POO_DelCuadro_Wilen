@@ -13,17 +13,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import vallegrande.edu.pe.sistema_web.Model.Usuario;
 
 public class MainView extends BorderPane {
 
-    // Botones del menú
     private Button btnInicio;
     private Button btnUsuarios;
 
-    // Campos del formulario para los datos reales de tu sistema
     private TextField txtNombre;
     private TextField txtEmail;
     private TextField txtTelefono;
@@ -31,23 +30,21 @@ public class MainView extends BorderPane {
     private TextField txtTipoComprador;
     private TextField txtMensaje;
 
-    // Botón para registrar un usuario
     private Button btnRegistrar;
+    private Button btnActualizar;
+    private Button btnEliminar;
 
-    // Tabla donde se muestran los usuarios
     private TableView<Usuario> tablaUsuarios;
 
     public MainView() {
-        // Inicializamos las secciones de la interfaz
+
         crearMenu();
         crearTabla();
         crearFormulario();
 
-        // Vista inicial por defecto
         mostrarInicio();
     }
 
-    // Crea el menú lateral
     private void crearMenu() {
         VBox menu = new VBox(15);
         menu.setPadding(new Insets(25));
@@ -69,7 +66,6 @@ public class MainView extends BorderPane {
         setLeft(menu);
     }
 
-    // Método auxiliar para construir botones uniformes
     private Button crearBoton(String texto) {
         Button boton = new Button(texto);
         boton.setPrefWidth(170);
@@ -77,7 +73,6 @@ public class MainView extends BorderPane {
         return boton;
     }
 
-    // Pantalla de Inicio
     public void mostrarInicio() {
         VBox contenido = new VBox(10);
         contenido.setAlignment(Pos.CENTER);
@@ -92,7 +87,6 @@ public class MainView extends BorderPane {
         setCenter(contenido);
     }
 
-    // Pantalla de Gestión de Usuarios
     public void mostrarUsuarios() {
         VBox contenido = new VBox(15);
         contenido.setPadding(new Insets(25));
@@ -100,7 +94,6 @@ public class MainView extends BorderPane {
         Label titulo = new Label("GESTIÓN DE USUARIOS");
         titulo.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
-        // Formulario organizado en una rejilla (GridPane)
         GridPane formGrid = new GridPane();
         formGrid.setHgap(10);
         formGrid.setVgap(10);
@@ -112,17 +105,19 @@ public class MainView extends BorderPane {
         formGrid.add(txtTipoComprador, 1, 1);
         formGrid.add(txtMensaje, 2, 1);
 
+        HBox botonesBox = new HBox(10);
+        botonesBox.getChildren().addAll(btnRegistrar, btnActualizar, btnEliminar);
+
         contenido.getChildren().addAll(
                 titulo,
                 formGrid,
-                btnRegistrar,
+                botonesBox,
                 tablaUsuarios
         );
 
         setCenter(contenido);
     }
 
-    // Instancia los campos de entrada de texto
     private void crearFormulario() {
         txtNombre = new TextField();
         txtNombre.setPromptText("Nombre");
@@ -142,12 +137,19 @@ public class MainView extends BorderPane {
         txtMensaje = new TextField();
         txtMensaje.setPromptText("Mensaje");
 
-        btnRegistrar = new Button("Registrar Usuario");
-        btnRegistrar.setStyle("-fx-background-color: #16A34A; -fx-text-fill: white; -fx-font-weight: bold;");
+
+        btnRegistrar = new Button("Registrar");
         btnRegistrar.setPrefHeight(35);
+
+
+        btnActualizar = new Button("Actualizar");
+        btnActualizar.setPrefHeight(35);
+
+
+        btnEliminar = new Button("Eliminar");
+        btnEliminar.setPrefHeight(35);
     }
 
-    // Construye la tabla y sus 7 columnas
     @SuppressWarnings("unchecked")
     private void crearTabla() {
         tablaUsuarios = new TableView<>();
@@ -175,12 +177,10 @@ public class MainView extends BorderPane {
         tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    // Asigna los datos a la tabla
     public void mostrarDatosUsuarios(List<Usuario> usuarios) {
         tablaUsuarios.setItems(FXCollections.observableArrayList(usuarios));
     }
 
-    // Limpia las cajas de texto tras el registro
     public void limpiarFormulario() {
         txtNombre.clear();
         txtEmail.clear();
@@ -190,11 +190,28 @@ public class MainView extends BorderPane {
         txtMensaje.clear();
     }
 
-    // --- Getters requeridos por MainController ---
+    public void cargarUsuarioEnFormulario(Usuario usuario) {
+        if (usuario != null) {
+            txtNombre.setText(usuario.getNombre() != null ? usuario.getNombre() : "");
+            txtEmail.setText(usuario.getEmail() != null ? usuario.getEmail() : "");
+            txtTelefono.setText(usuario.getTelefono() != null ? usuario.getTelefono() : "");
+            txtProducto.setText(usuario.getProducto() != null ? usuario.getProducto() : "");
+            txtTipoComprador.setText(usuario.getTipoComprador() != null ? usuario.getTipoComprador() : "");
+            txtMensaje.setText(usuario.getMensaje() != null ? usuario.getMensaje() : "");
+        }
+    }
 
     public Button getBtnInicio() { return btnInicio; }
     public Button getBtnUsuarios() { return btnUsuarios; }
     public Button getBtnRegistrar() { return btnRegistrar; }
+    public Button getBtnActualizar() { return btnActualizar; }
+    public Button getBtnEliminar() { return btnEliminar; }
+
+    public TableView<Usuario> getTablaUsuarios() { return tablaUsuarios; }
+
+    public Usuario getUsuarioSeleccionado() {
+        return tablaUsuarios.getSelectionModel().getSelectedItem();
+    }
 
     public String getNombre() { return txtNombre.getText(); }
     public String getEmail() { return txtEmail.getText(); }

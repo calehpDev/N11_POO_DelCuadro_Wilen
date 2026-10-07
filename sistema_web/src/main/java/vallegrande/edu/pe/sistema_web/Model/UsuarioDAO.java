@@ -9,7 +9,6 @@ import java.util.List;
 
 public class UsuarioDAO {
 
-    // Consulta los usuarios de la base de datos
     public List<Usuario> listar() {
         List<Usuario> lista = new ArrayList<>();
         String sql = "SELECT id, nombre, email, telefono, producto, tipo_comprador, mensaje FROM usuarios";
@@ -38,7 +37,6 @@ public class UsuarioDAO {
         return lista;
     }
 
-    // Inserta un nuevo usuario en la base de datos
     public void insertar(Usuario usuario) {
         String sql = """
                 INSERT INTO usuarios
@@ -56,6 +54,54 @@ public class UsuarioDAO {
             stmt.setString(5, usuario.getTipoComprador());
             stmt.setString(6, usuario.getMensaje());
 
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Actualiza un usuario existente en la base de datos
+    public void actualizar(Usuario usuario) {
+        String sql = """
+                UPDATE usuarios
+                SET nombre = ?,
+                    email = ?,
+                    telefono = ?,
+                    producto = ?,
+                    tipo_comprador = ?,
+                    mensaje = ?
+                WHERE id = ?
+                """;
+
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setString(3, usuario.getTelefono());
+            stmt.setString(4, usuario.getProducto());
+            stmt.setString(5, usuario.getTipoComprador());
+            stmt.setString(6, usuario.getMensaje());
+            stmt.setInt(7, usuario.getId());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void eliminar(int id) {
+        String sql = """
+                DELETE FROM usuarios
+                WHERE id = ?
+                """;
+
+        try (Connection conn = Conexion.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
             stmt.executeUpdate();
 
         } catch (SQLException e) {

@@ -17,20 +17,33 @@ public class MainController {
     }
 
     private void configurarEventos() {
-        // Evento botón Inicio
+
         view.getBtnInicio().setOnAction(e -> {
             view.mostrarInicio();
         });
 
-        // Evento botón Usuarios (cambia la vista y carga la tabla)
         view.getBtnUsuarios().setOnAction(e -> {
             view.mostrarUsuarios();
             cargarUsuarios();
         });
 
-        // Evento botón Registrar
         view.getBtnRegistrar().setOnAction(e -> {
             registrarUsuario();
+        });
+
+        view.getBtnActualizar().setOnAction(e -> {
+            actualizarUsuario();
+        });
+
+        view.getBtnEliminar().setOnAction(e -> {
+            eliminarUsuario();
+        });
+
+        view.getTablaUsuarios().setOnMouseClicked(e -> {
+            Usuario usuario = view.getUsuarioSeleccionado();
+            if (usuario != null) {
+                view.cargarUsuarioEnFormulario(usuario);
+            }
         });
     }
 
@@ -46,7 +59,7 @@ public class MainController {
 
     private void registrarUsuario() {
         try {
-            // Validación básica
+
             if (view.getNombre().trim().isEmpty() || view.getEmail().trim().isEmpty()) {
                 System.out.println("⚠️ Por favor completa al menos los campos Nombre y Email.");
                 return;
@@ -62,12 +75,56 @@ public class MainController {
 
             usuarioDAO.insertar(usuario);
 
-            // Limpia los inputs y refresca la tabla
             view.limpiarFormulario();
             cargarUsuarios();
 
         } catch (Exception e) {
             System.err.println("❌ Error al registrar usuario: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void actualizarUsuario() {
+        try {
+            Usuario usuario = view.getUsuarioSeleccionado();
+            if (usuario == null) {
+                System.out.println("⚠️ Por favor selecciona un usuario de la tabla para actualizar.");
+                return;
+            }
+
+            usuario.setNombre(view.getNombre());
+            usuario.setEmail(view.getEmail());
+            usuario.setTelefono(view.getTelefono());
+            usuario.setProducto(view.getProducto());
+            usuario.setTipoComprador(view.getTipoComprador());
+            usuario.setMensaje(view.getMensaje());
+
+            usuarioDAO.actualizar(usuario);
+
+            view.limpiarFormulario();
+            cargarUsuarios();
+
+        } catch (Exception e) {
+            System.err.println("❌ Error al actualizar usuario: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void eliminarUsuario() {
+        try {
+            Usuario usuario = view.getUsuarioSeleccionado();
+            if (usuario == null) {
+                System.out.println("⚠️ Por favor selecciona un usuario de la tabla para eliminar.");
+                return;
+            }
+
+            usuarioDAO.eliminar(usuario.getId());
+
+            view.limpiarFormulario();
+            cargarUsuarios();
+
+        } catch (Exception e) {
+            System.err.println("❌ Error al eliminar usuario: " + e.getMessage());
             e.printStackTrace();
         }
     }
