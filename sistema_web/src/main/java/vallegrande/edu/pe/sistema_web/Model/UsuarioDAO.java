@@ -11,7 +11,7 @@ public class UsuarioDAO {
 
     public List<Usuario> listar() {
         List<Usuario> lista = new ArrayList<>();
-        String sql = "SELECT id, nombre, email, telefono, producto, tipo_comprador, mensaje FROM usuarios";
+        String sql = "SELECT id, name, email, phone, product, buyer_type, message FROM users";
 
         try (Connection conn = Conexion.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -20,17 +20,18 @@ public class UsuarioDAO {
             while (rs.next()) {
                 Usuario u = new Usuario();
                 u.setId(rs.getInt("id"));
-                u.setNombre(rs.getString("nombre"));
+                u.setNombre(rs.getString("name"));
                 u.setEmail(rs.getString("email"));
-                u.setTelefono(rs.getString("telefono"));
-                u.setProducto(rs.getString("producto"));
-                u.setTipoComprador(rs.getString("tipo_comprador"));
-                u.setMensaje(rs.getString("mensaje"));
+                u.setTelefono(rs.getString("phone"));
+                u.setProducto(rs.getString("product"));
+                u.setTipoComprador(rs.getString("buyer_type"));
+                u.setMensaje(rs.getString("message"));
 
                 lista.add(u);
             }
 
         } catch (SQLException e) {
+            System.err.println("❌ Error al listar usuarios desde Aiven:");
             e.printStackTrace();
         }
 
@@ -39,8 +40,8 @@ public class UsuarioDAO {
 
     public void insertar(Usuario usuario) {
         String sql = """
-                INSERT INTO usuarios
-                (nombre, email, telefono, producto, tipo_comprador, mensaje)
+                INSERT INTO users
+                (name, email, phone, product, buyer_type, message)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """;
 
@@ -57,20 +58,20 @@ public class UsuarioDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
+            System.err.println("❌ Error al insertar usuario:");
             e.printStackTrace();
         }
     }
 
-    // Actualiza un usuario existente en la base de datos
     public void actualizar(Usuario usuario) {
         String sql = """
-                UPDATE usuarios
-                SET nombre = ?,
+                UPDATE users
+                SET name = ?,
                     email = ?,
-                    telefono = ?,
-                    producto = ?,
-                    tipo_comprador = ?,
-                    mensaje = ?
+                    phone = ?,
+                    product = ?,
+                    buyer_type = ?,
+                    message = ?
                 WHERE id = ?
                 """;
 
@@ -88,13 +89,14 @@ public class UsuarioDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
+            System.err.println("❌ Error al actualizar usuario:");
             e.printStackTrace();
         }
     }
 
     public void eliminar(int id) {
         String sql = """
-                DELETE FROM usuarios
+                DELETE FROM users
                 WHERE id = ?
                 """;
 
@@ -105,6 +107,7 @@ public class UsuarioDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
+            System.err.println("❌ Error al eliminar usuario:");
             e.printStackTrace();
         }
     }
