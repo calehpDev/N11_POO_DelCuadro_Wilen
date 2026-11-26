@@ -1,216 +1,304 @@
 package vallegrande.edu.pe.misistema.view;
 
+import java.util.List;
+
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import vallegrande.edu.pe.misistema.model.Usuario;
+
 public class MainView extends BorderPane {
+
+    // Botones del menú
     private Button btnInicio;
     private Button btnUsuarios;
-    private Button btnProductos;
-    private Button btnReportes;
-    private Button btnConfiguracion;
-    private Button btnCitas;
+
+    // NUEVO: campos del formulario de registro
+    private TextField txtNombre;
+    private TextField txtApellido;
+    private TextField txtCorreo;
+    private TextField txtEstado;
+
+    // NUEVO: botón para registrar un usuario
+    private Button btnRegistrar;
+
+    // Tabla donde mostraremos los usuarios
+    private TableView<Usuario> tablaUsuarios;
 
     public MainView() {
-        // Fondo general gris ultra claro
-        setStyle("-fx-background-color: #F8FAFC;");
+
+        // Creamos el menú
         crearMenu();
+
+        // Creamos la tabla
+        crearTabla();
+
+        // NUEVO: creamos los campos y el botón del formulario
+        crearFormulario();
+
+        // Mostramos Inicio al abrir el sistema
         mostrarInicio();
     }
 
+    // Crea el menú lateral
     private void crearMenu() {
-        VBox menu = new VBox(6);
-        menu.setPadding(new Insets(24, 14, 24, 14));
-        menu.setPrefWidth(220);
-        menu.setStyle("-fx-background-color: #0F172A;"); // Slate oscuro
 
+        // Contenedor vertical para el menú
+        VBox menu = new VBox(15);
+
+        // Espaciado interno
+        menu.setPadding(new Insets(25));
+
+        // Ancho del menú
+        menu.setPrefWidth(220);
+
+        // Título del sistema
         Label titulo = new Label("MI SISTEMA");
+
         titulo.setStyle(
-                "-fx-font-size: 13px;" +
+                "-fx-font-size: 20px;" +
                         "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #94A3B8;" +
-                        "-fx-padding: 0 0 12 10;"
+                        "-fx-text-fill: white;"
         );
 
-        btnInicio = crearBoton("🏠  Inicio");
-        btnUsuarios = crearBoton("👥  Usuarios");
-        btnProductos = crearBoton("📦  Productos");
-        btnReportes = crearBoton("📊  Reportes");
-        btnConfiguracion = crearBoton("⚙️  Configuración");
-        btnCitas = crearBoton("📅  Citas");
+        // Creamos los botones
+        btnInicio = crearBoton("Inicio");
 
+        btnUsuarios = crearBoton("Usuarios");
+
+        // Agregamos los elementos al menú
         menu.getChildren().addAll(
                 titulo,
                 btnInicio,
-                btnUsuarios,
-                btnProductos,
-                btnReportes,
-                btnConfiguracion,
-                btnCitas
+                btnUsuarios
         );
+
+        // Color del menú
+        menu.setStyle(
+                "-fx-background-color: #2563EB;"
+        );
+
+        // Colocamos el menú a la izquierda
         setLeft(menu);
     }
 
+    // Crea un botón del menú
     private Button crearBoton(String texto) {
+
         Button boton = new Button(texto);
-        boton.setPrefWidth(192);
-        boton.setPrefHeight(38);
-        boton.setAlignment(Pos.CENTER_LEFT);
-        boton.setPadding(new Insets(0, 0, 0, 12));
 
-        // Estilo Base Transparente
-        String estiloBase =
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: #94A3B8;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-font-weight: 500;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;";
+        boton.setPrefWidth(170);
 
-        // Estilo al pasar el cursor (Hover)
-        String estiloHover =
-                "-fx-background-color: #1E293B;" +
-                        "-fx-text-fill: #F8FAFC;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-font-weight: 500;" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;";
-
-        boton.setStyle(estiloBase);
-
-        // Eventos dinámicos de Hover
-        boton.setOnMouseEntered(e -> boton.setStyle(estiloHover));
-        boton.setOnMouseExited(e -> boton.setStyle(estiloBase));
+        boton.setPrefHeight(40);
 
         return boton;
     }
 
+    // Muestra la pantalla de inicio
     public void mostrarInicio() {
-        VBox contenido = new VBox(8);
+
+        // Contenedor del contenido
+        VBox contenido = new VBox(10);
+
+        // Centramos el contenido
         contenido.setAlignment(Pos.CENTER);
 
-        Label titulo = new Label("Bienvenido de nuevo");
-        titulo.setStyle("-fx-font-size: 24px; -fx-font-weight: 600; -fx-text-fill: #0F172A;");
+        // Título
+        Label titulo = new Label("BIENVENIDO");
 
-        Label texto = new Label("Resumen general del panel de administración.");
-        texto.setStyle("-fx-font-size: 14px; -fx-text-fill: #64748B;");
+        titulo.setStyle(
+                "-fx-font-size: 28px;" +
+                        "-fx-font-weight: bold;"
+        );
 
-        contenido.getChildren().addAll(titulo, texto);
+        // Texto de bienvenida
+        Label texto = new Label(
+                "Sistema de gestión de usuarios"
+        );
+
+        // Agregamos los elementos
+        contenido.getChildren().addAll(
+                titulo,
+                texto
+        );
+
+        // Mostramos el contenido en el centro
         setCenter(contenido);
     }
 
+    // Muestra la pantalla de usuarios
     public void mostrarUsuarios() {
-        VBox contenido = crearContenedorSeccion("Gestión de Usuarios", "Administra los accesos y roles de la plataforma.");
-        HBox tarjetas = new HBox(16);
-        tarjetas.getChildren().addAll(
-                crearTarjeta("Carlos Pérez", "Administrador", "Activo"),
-                crearTarjeta("María López", "Vendedora", "Activo"),
-                crearTarjeta("Piero Ramos", "Supervisor", "Inactivo")
+
+        // Contenedor del contenido
+        VBox contenido = new VBox(20);
+
+        contenido.setPadding(new Insets(30));
+
+        // Título de la pantalla
+        Label titulo = new Label("USUARIOS");
+
+        titulo.setStyle(
+                "-fx-font-size: 26px;" +
+                        "-fx-font-weight: bold;"
         );
-        contenido.getChildren().add(tarjetas);
+
+        // NUEVO: agregamos los campos del formulario,
+        // el botón Registrar y la tabla
+        contenido.getChildren().addAll(
+                titulo,
+                txtNombre,
+                txtApellido,
+                txtCorreo,
+                txtEstado,
+                btnRegistrar,
+                tablaUsuarios
+        );
+
+        // Mostramos el contenido en el centro
         setCenter(contenido);
     }
 
-    public void mostrarProductos() {
-        VBox contenido = crearContenedorSeccion("Catálogo de Productos", "Inventario disponible en el almacén.");
-        HBox tarjetas = new HBox(16);
-        tarjetas.getChildren().addAll(
-                crearTarjeta("Laptop Lenovo", "S/ 2,500.00", "Stock: 12 unids."),
-                crearTarjeta("Mouse Logitech", "S/ 80.00", "Stock: 45 unids."),
-                crearTarjeta("Teclado Mecánico", "S/ 180.00", "Stock: 8 unids.")
-        );
-        contenido.getChildren().add(tarjetas);
-        setCenter(contenido);
+    // NUEVO: crea los elementos del formulario
+    private void crearFormulario() {
+
+        // NUEVO: campo para ingresar el nombre
+        txtNombre = new TextField();
+
+        // NUEVO: texto de ayuda que aparece dentro del campo
+        txtNombre.setPromptText("Nombre");
+
+        // NUEVO: campo para ingresar el apellido
+        txtApellido = new TextField();
+
+        // NUEVO: texto de ayuda del campo
+        txtApellido.setPromptText("Apellido");
+
+        // NUEVO: campo para ingresar el correo
+        txtCorreo = new TextField();
+
+        // NUEVO: texto de ayuda del campo
+        txtCorreo.setPromptText("Correo");
+
+        // NUEVO: campo para ingresar el estado
+        txtEstado = new TextField();
+
+        // NUEVO: texto de ayuda del campo
+        txtEstado.setPromptText("Estado");
+
+        // NUEVO: botón que permitirá registrar el usuario
+        btnRegistrar = new Button("Registrar");
     }
 
-    public void mostrarReportes() {
-        VBox contenido = crearContenedorSeccion("Reportes y Analíticas", "Métricas de rendimiento comercial del periodo.");
-        HBox tarjetas = new HBox(16);
-        tarjetas.getChildren().addAll(
-                crearTarjeta("Ventas Mensuales", "S/ 12,450.00", "+12% vs mes anterior"),
-                crearTarjeta("Productos Reg.", "1,240 Unidades", "8 categorías activas"),
-                crearTarjeta("Usuarios Activos", "45 En línea", "Pico diario: 11:00 AM")
-        );
-        contenido.getChildren().add(tarjetas);
-        setCenter(contenido);
-    }
+    // Crea la tabla de usuarios
+    private void crearTabla() {
 
-    public void mostrarConfiguracion() {
-        VBox contenido = crearContenedorSeccion("Configuración", "Preferencias del sistema y ajustes de cuenta.");
-        HBox tarjetas = new HBox(16);
-        tarjetas.getChildren().addAll(
-                crearTarjeta("Perfil de Usuario", "admin@vallegrande.edu.pe", "Editar datos"),
-                crearTarjeta("Apariencia", "Modo Minimalista", "Tema activo"),
-                crearTarjeta("Seguridad", "Autenticación 2FA", "Habilitada")
-        );
-        contenido.getChildren().add(tarjetas);
-        setCenter(contenido);
-    }
+        // Creamos la tabla
+        tablaUsuarios = new TableView<>();
 
-    public void mostrarCitas() {
-        VBox contenido = crearContenedorSeccion("Citas Agendadas", "Cronograma de atenciones programadas.");
-        HBox tarjetas = new HBox(16);
-        tarjetas.getChildren().addAll(
-                crearTarjeta("Juan Pérez", "10:00 AM - Hoy", "Atención Presencial"),
-                crearTarjeta("María Gómez", "11:30 AM - Hoy", "Soporte Técnico"),
-                crearTarjeta("Pedro Ruiz", "03:00 PM - Mañana", "Consulta General")
-        );
-        contenido.getChildren().add(tarjetas);
-        setCenter(contenido);
-    }
+        // Creamos las columnas
+        TableColumn<Usuario, Integer> colId =
+                new TableColumn<>("ID");
 
-    // Estructura limpia para títulos de sección
-    private VBox crearContenedorSeccion(String tituloTexto, String subtituloTexto) {
-        VBox contenedor = new VBox(20);
-        contenedor.setPadding(new Insets(36));
+        TableColumn<Usuario, String> colNombre =
+                new TableColumn<>("Nombre");
 
-        VBox encabezado = new VBox(4);
-        Label titulo = new Label(tituloTexto);
-        titulo.setStyle("-fx-font-size: 22px; -fx-font-weight: 600; -fx-text-fill: #0F172A;");
-        Label subtitulo = new Label(subtituloTexto);
-        subtitulo.setStyle("-fx-font-size: 13px; -fx-text-fill: #64748B;");
+        TableColumn<Usuario, String> colApellido =
+                new TableColumn<>("Apellido");
 
-        encabezado.getChildren().addAll(titulo, subtitulo);
-        contenedor.getChildren().add(encabezado);
-        return contenedor;
-    }
+        TableColumn<Usuario, String> colCorreo =
+                new TableColumn<>("Correo");
 
-    // Tarjetas minimalistas: Fondo blanco puro, borde gris fino, tipografía limpia
-    private VBox crearTarjeta(String titulo, String valor, String detalle) {
-        VBox tarjeta = new VBox(6);
-        tarjeta.setPadding(new Insets(18));
-        tarjeta.setPrefWidth(200);
-        tarjeta.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-border-color: #E2E8F0;" +
-                        "-fx-border-width: 1px;" +
-                        "-fx-border-radius: 8px;" +
-                        "-fx-background-radius: 8px;"
+        TableColumn<Usuario, String> colEstado =
+                new TableColumn<>("Estado");
+
+        // Indicamos qué atributo mostrará cada columna
+        colId.setCellValueFactory(
+                new PropertyValueFactory<>("id")
         );
 
-        Label lblTitulo = new Label(titulo);
-        lblTitulo.setStyle("-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #0F172A;");
+        colNombre.setCellValueFactory(
+                new PropertyValueFactory<>("nombre")
+        );
 
-        Label lblValor = new Label(valor);
-        lblValor.setStyle("-fx-font-size: 14px; -fx-font-weight: 500; -fx-text-fill: #334155;");
+        colApellido.setCellValueFactory(
+                new PropertyValueFactory<>("apellido")
+        );
 
-        Label lblDetalle = new Label(detalle);
-        lblDetalle.setStyle("-fx-font-size: 12px; -fx-text-fill: #94A3B8;");
+        colCorreo.setCellValueFactory(
+                new PropertyValueFactory<>("correo")
+        );
 
-        tarjeta.getChildren().addAll(lblTitulo, lblValor, lblDetalle);
-        return tarjeta;
+        colEstado.setCellValueFactory(
+                new PropertyValueFactory<>("estado")
+        );
+
+        // Agregamos las columnas a la tabla
+        tablaUsuarios.getColumns().addAll(
+                colId,
+                colNombre,
+                colApellido,
+                colCorreo,
+                colEstado
+        );
     }
 
-    // Getters
-    public Button getBtnInicio() { return btnInicio; }
-    public Button getBtnUsuarios() { return btnUsuarios; }
-    public Button getBtnProductos() { return btnProductos; }
-    public Button getBtnReportes() { return btnReportes; }
-    public Button getBtnConfiguracion() { return btnConfiguracion; }
-    public Button getBtnCitas() { return btnCitas; }
+    // Recibe los usuarios y los muestra en la tabla
+    public void mostrarDatosUsuarios(List<Usuario> usuarios) {
+
+        // Convertimos la lista a una colección observable
+        tablaUsuarios.setItems(
+                FXCollections.observableArrayList(usuarios)
+        );
+    }
+
+    // Permite que el Controller acceda al botón Inicio
+    public Button getBtnInicio() {
+
+        return btnInicio;
+    }
+
+    // Permite que el Controller acceda al botón Usuarios
+    public Button getBtnUsuarios() {
+
+        return btnUsuarios;
+    }
+
+    // NUEVO: permite que el Controller acceda al botón Registrar
+    public Button getBtnRegistrar() {
+
+        return btnRegistrar;
+    }
+
+    // NUEVO: obtiene el nombre escrito en el formulario
+    public String getNombre() {
+
+        return txtNombre.getText();
+    }
+
+    // NUEVO: obtiene el apellido escrito en el formulario
+    public String getApellido() {
+
+        return txtApellido.getText();
+    }
+
+    // NUEVO: obtiene el correo escrito en el formulario
+    public String getCorreo() {
+
+        return txtCorreo.getText();
+    }
+
+    // NUEVO: obtiene el estado escrito en el formulario
+    public String getEstado() {
+
+        return txtEstado.getText();
+    }
 }
